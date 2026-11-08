@@ -1,0 +1,32 @@
+{
+  "name": "mailblink",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "MailBlink - 运行在 Cloudflare Workers 免费版上的轻量临时邮箱",
+  "scripts": {
+    "dev": "wrangler dev",
+    "db:migrate:local": "wrangler d1 migrations apply DB --local",
+    "db:migrate:remote": "wrangler d1 migrations apply DB --remote",
+    "deploy": "wrangler deploy && wrangler d1 migrations apply DB --remote",
+    "typecheck": "tsc --noEmit"
+  },
+  "cloudflare": {
+    "bindings": {
+      "ADMIN_PASSWORD": {
+        "description": "管理后台登录密码，请使用 **16 位以上** 的强密码。"
+      },
+      "SESSION_SECRET": {
+        "description": "会话签名密钥，可用 `openssl rand -hex 32` 生成。更改后所有用户和管理员需重新登录。"
+      }
+    }
+  },
+  "dependencies": {
+    "postal-mime": "^4.2.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20261107.0",
+    "typescript": "^5.9.3",
+    "wrangler": "^4.158.0"
+  }
+}

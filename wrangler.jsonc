@@ -1,0 +1,27 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "mailblink",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-11-01",
+  // 静态资源（前端页面）由 Cloudflare 边缘直接返回：不消耗 Worker 请求额度，且全球缓存
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "not_found_handling": "none",
+    // 仅 API 与 /邮箱地址 进入 Worker，其余静态文件全部走边缘
+    "run_worker_first": ["/api/*", "/*@*"]
+  },
+  // 本文件会提交到仓库，请勿写入任何密码、Token、账号 ID 或数据库 ID。
+  // 密码类配置一律使用 Worker 机密（wrangler secret put / 控制台「变量和机密」），本地开发写在 .dev.vars。
+  // 不填 database_id：首次部署时 Wrangler 自动创建名为 mailblink 的 D1 并绑定，之后按名称复用。
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "mailblink",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "triggers": { "crons": [] },
+  "rules": [{ "type": "Text", "globs": ["**/*.sql"], "fallthrough": true }],
+  "observability": { "enabled": true, "head_sampling_rate": 0.1 }
+}

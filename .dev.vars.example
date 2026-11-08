@@ -1,0 +1,2 @@
+ADMIN_PASSWORD=change-me-to-a-strong-password
+SESSION_SECRET=replace-with-openssl-rand-hex-32

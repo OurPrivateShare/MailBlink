@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0f766e" />
+    <meta name="description" content="MailBlink 轻量临时邮箱：注册账号一键生成邮箱、公开 API 链接查看邮件。" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <title>MailBlink 临时邮箱</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="modulepreload" href="/common.js" />
+    <link rel="modulepreload" href="/viewer.js" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="返回首页">
+        <span class="brand-mark"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span>
+        <span data-site-name>MailBlink</span>
+      </a>
+      <div class="spacer"></div>
+      <div id="topbar-actions" class="row"></div>
+    </header>
+    <main id="root">
+      <div class="center-screen"><p class="muted">加载中…</p></div>
+    </main>
+    <noscript><p style="padding:20px">请启用 JavaScript 以使用 MailBlink。</p></noscript>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
