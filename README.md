@@ -2,7 +2,7 @@
 
 运行在 **Cloudflare Workers 免费版** 上的轻量临时邮箱：注册账号一键生成邮箱、公开 API 链接查看邮件，并带有完整的管理后台。
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/MyPrivateShare/MailBlink)
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/OurPrivateShare/MailBlink)
 
 > 一键部署按钮要求仓库为 **公开**。私有仓库请用下文「方式二：连接 GitHub 部署」。
 
@@ -53,7 +53,7 @@
 | 收信最快、零轮询 | **Email Worker** 直接接收邮件写入 D1，到达即可见 |
 | 不实时读取 | 只在打开邮箱 / 点击刷新时请求；自动刷新默认关闭，开启后仅在页面可见时 30 秒一次，10 分钟自动关闭 |
 | 减少请求 | 前端为静态资源（**不消耗每日 10 万次 Worker 请求额度**）；登录后一次请求返回用户与邮箱列表 |
-| 边缘缓存 | 邮件列表用 Cache API 缓存 10 秒，邮件详情缓存 5 分钟（自定义域名生效） |
+| 边缘缓存 | 公开邮件列表用 Cache API 缓存，默认 10 秒（自定义域名生效）；邮件正文按需读取，不缓存 |
 | 省 D1 额度 | 设置 / 域名在内存缓存 60 秒；用户活跃时间最多 6 小时写一次；邮件只存正文不存附件 |
 | CPU 10ms 限制 | 无框架、无前端构建，Worker 打包体积小 |
 
@@ -66,6 +66,10 @@
 2. 域名已接入 Cloudflare（DNS 托管）
 3. 想好管理员密码 `ADMIN_PASSWORD`，并生成会话密钥 `SESSION_SECRET`（可用 `openssl rand -hex 32` 或任意 32 位以上随机字符串）
 
+> 网站和 API 可以直接使用部署后提供的 `workers.dev` 地址。接收外部邮件需要另行配置接入 Cloudflare 的收信域名，`workers.dev` 不能作为收信域名。
+>
+> 构建环境要求 **Node.js 22 或以上**，仓库通过 `.node-version` 指定使用 Node.js 22。请同时提交 `package.json` 和 `package-lock.json`，保证网页部署使用一致的依赖版本。
+
 ### 方式一：一键部署（公开仓库）
 1. 点击上方 **Deploy to Cloudflare** 按钮
 2. 登录 Cloudflare，按提示填写 `ADMIN_PASSWORD`、`SESSION_SECRET`
@@ -75,7 +79,7 @@
 ### 方式二：连接 GitHub 部署（私有仓库推荐，网页操作）
 1. 打开 [Workers & Pages → 创建](https://dash.cloudflare.com/?to=/:account/workers-and-pages/create) → **导入存储库**（Import a repository）→ 授权 GitHub → 选择本仓库
 2. 构建设置：
-   - 构建命令：留空
+   - 构建命令：`npm run typecheck`
    - 部署命令：`npm run deploy`（部署时自动创建名为 `mailblink` 的 D1 数据库，并执行数据库迁移）
 3. 点击 **部署**，完成后进入 Worker → **设置 → 变量和机密**，添加两个 **机密（Secret）**：`ADMIN_PASSWORD`、`SESSION_SECRET`，然后重新部署一次
 
@@ -96,8 +100,8 @@ npx wrangler secret put SESSION_SECRET
 
 ## 部署后配置
 
-1. **绑定自定义域名**（API 链接与边缘缓存需要）
-   打开 Worker → **设置 → 域和路由 → 添加 → 自定义域**，例如 `mail.example.com`
+1. **（可选）绑定自定义访问域名**
+   默认的 `workers.dev` 地址即可访问网站和 API。如需自定义访问地址与边缘缓存，打开 Worker → **设置 → 域和路由 → 添加 → 自定义域**，例如 `mail.example.com`
    直达：[Workers & Pages](https://dash.cloudflare.com/?to=/:account/workers-and-pages)
 
 2. **登录后台添加域名**

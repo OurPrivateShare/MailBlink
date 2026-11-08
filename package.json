@@ -1,9 +1,12 @@
 {
   "name": "mailblink",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "type": "module",
   "description": "MailBlink - 运行在 Cloudflare Workers 免费版上的轻量临时邮箱",
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "scripts": {
     "dev": "wrangler dev",
     "db:migrate:local": "wrangler d1 migrations apply DB --local",
@@ -25,7 +28,7 @@
     "postal-mime": "^4.2.0"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20261107.0",
+    "@cloudflare/workers-types": "^5.20261108.1",
     "typescript": "^5.9.3",
     "wrangler": "^4.158.0"
   }

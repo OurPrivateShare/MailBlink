@@ -130,10 +130,10 @@ function userFilter(params: URLSearchParams): { filter: string; clause: string; 
     default:
       throw new HttpError(400, "未知的过滤条件");
   }
-  const q = (params.get("q") || "").trim().replace(/[%_\\]/g, "").slice(0, 64);
+  const q = (params.get("q") || "").trim().slice(0, 64);
   if (q) {
-    where.push("u.username LIKE ?");
-    binds.push(`%${q}%`);
+    where.push("u.username LIKE ? ESCAPE '\\'");
+    binds.push(`%${q.replace(/[\\%_]/g, "\\$&")}%`);
   }
   return { filter, clause: where.length ? `WHERE ${where.join(" AND ")}` : "", binds };
 }
